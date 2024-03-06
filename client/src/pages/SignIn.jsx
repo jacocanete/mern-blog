@@ -13,9 +13,17 @@ export default function SignIn() {
   const { loading, error: errorMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // handle form input change
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
+
+  // handle form submit (when user clicks submit)
+  // dispatch(); is the function that triggers
+  // the action from the userSlice
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
@@ -91,7 +99,7 @@ export default function SignIn() {
                   <span className="pl-3">Loading...</span>
                 </>
               ) : (
-                "Sign-up"
+                "Sign-in"
               )}
             </Button>
           </form>
