@@ -6,6 +6,8 @@ const initialState = {
   loading: false,
 };
 
+// This is the user slice, it handles the user state
+
 const userSlice = createSlice({
   name: "user",
   initialState,
