@@ -1,6 +1,6 @@
 import { Alert, Modal, TextInput } from "flowbite-react";
 import { useSelector } from "react-redux";
-import { Button } from "flowbite-react";
+import { Button, Spinner } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import {
   getDownloadURL,
@@ -23,9 +23,10 @@ import {
 import { useDispatch } from "react-redux";
 import { set } from "mongoose";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 export default function DashProfile() {
-  const { currentUser, error } = useSelector((state) => state.user);
+  const { currentUser, error, loading } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
@@ -240,9 +241,32 @@ export default function DashProfile() {
           placeholder="Password"
           onChange={handleChange}
         />
-        <Button type="submit" gradientDuoTone="purpleToBlue" outline>
-          Update
+        <Button
+          type="submit"
+          gradientDuoTone="purpleToBlue"
+          outline
+          disabled={loading || imageFileUploading}
+        >
+          {loading || imageFileUploading ? (
+            <>
+              <Spinner size="sm" />
+              <span className="pl-3">Loading...</span>
+            </>
+          ) : (
+            "Update"
+          )}
         </Button>
+        {currentUser.isAdmin && (
+          <Link to={"/create-post"}>
+            <Button
+              type="button"
+              gradientDuoTone="purpleToPink"
+              className="w-full"
+            >
+              Create a post
+            </Button>
+          </Link>
+        )}
       </form>
       <div className="text-red-500 flex justify-between mt-5">
         <span className="cursor-pointer" onClick={() => setShowModal(true)}>
@@ -262,7 +286,7 @@ export default function DashProfile() {
           {updateUserError}
         </Alert>
       )}
-      {error && (
+      {error && !updateUserError && (
         <Alert color="failure" className="mt-5">
           {error}
         </Alert>
